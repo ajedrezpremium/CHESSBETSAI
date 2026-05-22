@@ -3,7 +3,7 @@ import type { NextRequest } from 'next/server'
 import { createServerClient } from '@supabase/ssr'
 
 const protectedRoutes = ['/dashboard', '/academy', '/live']
-const authRoutes = ['/auth/login', '/auth/register']
+const authRoutes = ['/login', '/register']
 
 export async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname
@@ -49,7 +49,7 @@ export async function proxy(request: NextRequest) {
 
   if (isProtected && !user) {
     const url = request.nextUrl.clone()
-    url.pathname = '/auth/login'
+    url.pathname = '/login'
     url.searchParams.set('redirect', pathname)
     return NextResponse.redirect(url)
   }
