@@ -155,8 +155,10 @@ O simplemente escribe cualquier consulta sobre apuestas deportivas.""")
         return jsonify({"ok": True})
 
 
-@app.route("/chat", methods=["POST"])
+@app.route("/chat", methods=["GET", "POST"])
 def chat():
+    if request.method == "GET":
+        return jsonify({"message": "Usa POST con JSON {messages: [{role, content}]}"})
     """Web ChatBot endpoint — used by the web UI instead of /api/chat."""
     try:
         data = request.get_json(force=True)
