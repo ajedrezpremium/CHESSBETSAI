@@ -123,7 +123,7 @@ export default function Home() {
             <p className="mb-8 text-zinc-400">
               Únete a la academia y empieza tu camino hacia Grandmaster.
             </p>
-            <Link href="/auth/register">
+            <Link href="/register">
               <Button variant="gold" size="lg">
                 Comenzar Nivel 1 — Gratis
                 <ChevronRight className="ml-2 h-5 w-5" />

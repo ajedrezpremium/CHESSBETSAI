@@ -99,12 +99,12 @@ export function Navbar() {
             </>
           ) : (
             <>
-              <Link href="/auth/login">
+              <Link href="/login">
                 <Button variant="ghost" size="sm">
                   Iniciar Sesión
                 </Button>
               </Link>
-              <Link href="/auth/register">
+              <Link href="/register">
                 <Button variant="gold" size="sm">
                   Empezar Ahora
                   <ChevronRight className="ml-1 h-4 w-4" />
@@ -149,7 +149,7 @@ export function Navbar() {
               </button>
             ) : (
               <Link
-                href="/auth/register"
+                href="/register"
                 onClick={() => setMenuOpen(false)}
                 className="block rounded-lg bg-amber-500 px-4 py-3 text-center text-sm font-medium text-black"
               >
