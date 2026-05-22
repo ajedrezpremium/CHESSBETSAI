@@ -155,6 +155,23 @@ O simplemente escribe cualquier consulta sobre apuestas deportivas.""")
         return jsonify({"ok": True})
 
 
+@app.route("/chat", methods=["POST"])
+def chat():
+    """Web ChatBot endpoint — used by the web UI instead of /api/chat."""
+    try:
+        data = request.get_json(force=True)
+        messages = data.get("messages", [])
+        if not messages:
+            return jsonify({"error": "messages required"}), 400
+
+        user_msg = messages[-1]["content"] if messages else ""
+        reply = ask_ai(user_msg)
+        return jsonify({"reply": reply})
+    except Exception as e:
+        log.error(f"Chat endpoint error: {e}")
+        return jsonify({"error": "Internal error"}), 500
+
+
 @app.route("/health", methods=["GET"])
 def health():
     return jsonify({"status": "ok"})

@@ -38,62 +38,92 @@ export function ChatBot() {
     setInput('')
     setLoading(true)
 
+    const RENDER_API = 'https://chessbetsai.onrender.com/chat'
+    const LOCAL_API = '/api/chat'
+
     try {
-      const res = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          messages: [...messages, userMsg].map((m) => ({
-            role: m.role,
-            content: m.content,
-          })),
-        }),
-      })
+      let reply = ''
 
-      if (!res.ok) throw new Error('Error')
+      // Try Render first, fallback to local Next.js API
+      try {
+        const res = await fetch(RENDER_API, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            messages: [...messages, userMsg].map((m) => ({
+              role: m.role,
+              content: m.content,
+            })),
+          }),
+        })
+        if (res.ok) {
+          const data = await res.json()
+          reply = data.reply || ''
+        }
+      } catch {}
 
-      const reader = res.body?.getReader()
-      const decoder = new TextDecoder()
+      if (!reply) {
+        try {
+          const res = await fetch(LOCAL_API, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              messages: [...messages, userMsg].map((m) => ({
+                role: m.role,
+                content: m.content,
+              })),
+            }),
+          })
+          if (res.ok) {
+            const reader = res.body?.getReader()
+            const decoder = new TextDecoder()
+            if (reader) {
+              const assistantId = (Date.now() + 1).toString()
+              setMessages((prev) => [
+                ...prev,
+                {
+                  id: assistantId,
+                  role: 'assistant',
+                  content: '',
+                  timestamp: Date.now(),
+                },
+              ])
+              while (true) {
+                const { done, value } = await reader.read()
+                if (done) break
+                const text = decoder.decode(value)
+                const lines = text.split('\n').filter((l) => l.startsWith('data: '))
+                for (const line of lines) {
+                  const data = line.slice(6)
+                  if (data === '[DONE]') continue
+                  try {
+                    const parsed = JSON.parse(data)
+                    const content = parsed.choices?.[0]?.delta?.content || ''
+                    setMessages((prev) => {
+                      const copy = [...prev]
+                      const last = copy[copy.length - 1]
+                      if (last.role === 'assistant' && last.id === assistantId) {
+                        copy[copy.length - 1] = { ...last, content: last.content + content }
+                      }
+                      return copy
+                    })
+                  } catch {}
+                }
+              }
+              return
+            }
+          }
+        } catch {}
+      }
 
-      if (reader) {
-        const assistantId = (Date.now() + 1).toString()
+      // Render response (non-streaming)
+      if (reply) {
         setMessages((prev) => [
           ...prev,
-          {
-            id: assistantId,
-            role: 'assistant',
-            content: '',
-            timestamp: Date.now(),
-          },
+          { id: (Date.now() + 1).toString(), role: 'assistant', content: reply, timestamp: Date.now() },
         ])
-
-        while (true) {
-          const { done, value } = await reader.read()
-          if (done) break
-
-          const text = decoder.decode(value)
-          const lines = text.split('\n').filter((l) => l.startsWith('data: '))
-
-          for (const line of lines) {
-            const data = line.slice(6)
-            if (data === '[DONE]') continue
-            try {
-              const parsed = JSON.parse(data)
-              const content = parsed.choices?.[0]?.delta?.content || ''
-              setMessages((prev) => {
-                const copy = [...prev]
-                const last = copy[copy.length - 1]
-                if (last.role === 'assistant' && last.id === assistantId) {
-                  copy[copy.length - 1] = {
-                    ...last,
-                    content: last.content + content,
-                  }
-                }
-                return copy
-              })
-            } catch {}
-          }
-        }
+      } else {
+        throw new Error('No response')
       }
     } catch {
       setMessages((prev) => [
