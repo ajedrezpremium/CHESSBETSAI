@@ -15,6 +15,7 @@ const navLinks = [
   { href: '/academy', label: 'Academia' },
   { href: '/apuestas', label: 'Apuestas' },
   { href: '/live', label: 'Live Trading' },
+  { href: '/leaderboard', label: 'Ranking' },
 ]
 
 export function Navbar() {

@@ -162,42 +162,47 @@ export default async function Dashboard() {
         </>
       )}
 
-      <div className="grid gap-4 sm:grid-cols-3">
-        <Link
-          href="/academy"
-          className="group flex items-center justify-between rounded-xl border border-zinc-800 bg-zinc-900/50 p-5 transition-all hover:border-zinc-700"
-        >
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <Link href="/academy"
+          className="group flex items-center justify-between rounded-xl border border-zinc-800 bg-zinc-900/50 p-5 transition-all hover:border-zinc-700">
           <div className="flex items-center gap-3">
             <BookOpen className="h-5 w-5 text-amber-500" />
             <div>
-              <div className="font-semibold text-zinc-100">Ir a la Academia</div>
+              <div className="font-semibold text-zinc-100">Academia</div>
               <div className="text-sm text-zinc-500">Continúa tu formación</div>
             </div>
           </div>
           <ChevronRight className="h-5 w-5 text-zinc-600 transition-transform group-hover:translate-x-1" />
         </Link>
-        <Link
-          href="/live"
-          className="group flex items-center justify-between rounded-xl border border-zinc-800 bg-zinc-900/50 p-5 transition-all hover:border-zinc-700"
-        >
+        <Link href="/live"
+          className="group flex items-center justify-between rounded-xl border border-zinc-800 bg-zinc-900/50 p-5 transition-all hover:border-zinc-700">
           <div className="flex items-center gap-3">
             <BarChart3 className="h-5 w-5 text-emerald-500" />
             <div>
               <div className="font-semibold text-zinc-100">Live Trading</div>
-              <div className="text-sm text-zinc-500">Analiza partidos y detecta value bets</div>
+              <div className="text-sm text-zinc-500">Analiza y detecta value bets</div>
             </div>
           </div>
           <ChevronRight className="h-5 w-5 text-zinc-600 transition-transform group-hover:translate-x-1" />
         </Link>
-        <Link
-          href="/perfil"
-          className="group flex items-center justify-between rounded-xl border border-zinc-800 bg-zinc-900/50 p-5 transition-all hover:border-zinc-700"
-        >
+        <Link href="/perfil"
+          className="group flex items-center justify-between rounded-xl border border-zinc-800 bg-zinc-900/50 p-5 transition-all hover:border-zinc-700">
           <div className="flex items-center gap-3">
             <User className="h-5 w-5 text-purple-500" />
             <div>
               <div className="font-semibold text-zinc-100">Mi Perfil</div>
-              <div className="text-sm text-zinc-500">Estadísticas, historial y logros</div>
+              <div className="text-sm text-zinc-500">Estadísticas y logros</div>
+            </div>
+          </div>
+          <ChevronRight className="h-5 w-5 text-zinc-600 transition-transform group-hover:translate-x-1" />
+        </Link>
+        <Link href="/leaderboard"
+          className="group flex items-center justify-between rounded-xl border border-zinc-800 bg-zinc-900/50 p-5 transition-all hover:border-zinc-700">
+          <div className="flex items-center gap-3">
+            <Trophy className="h-5 w-5 text-amber-500" />
+            <div>
+              <div className="font-semibold text-zinc-100">Ranking</div>
+              <div className="text-sm text-zinc-500">Clasificación global</div>
             </div>
           </div>
           <ChevronRight className="h-5 w-5 text-zinc-600 transition-transform group-hover:translate-x-1" />

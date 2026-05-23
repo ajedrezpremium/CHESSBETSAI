@@ -55,17 +55,24 @@ export interface OddsContext {
 export async function chatWithAgent(
   messages: AgentMessage[],
   userContext?: UserContext | null,
-  oddsContext?: OddsContext[] | null
+  oddsContext?: OddsContext[] | null,
+  memoryMessages?: AgentMessage[]
 ) {
   let systemPrompt = BASE_SYSTEM_PROMPT
 
   if (userContext) {
-    systemPrompt += `\n\nCONTEXTO DEL USUARIO:\n- Nombre: ${userContext.name || 'No disponible'}\n- ELO: ${userContext.elo}\n- XP: ${userContext.xp}\n- Racha: ${userContext.streak} días\n- Bankroll: ${userContext.bankroll}€\n- Apuestas recientes: ${userContext.recentBets.length > 0 ? userContext.recentBets.map(b => `${b.event_name}: ${b.result} (${b.profit > 0 ? '+' : ''}${b.profit}€)`).join(', ') : 'Sin apuestas recientes'}`
+    systemPrompt += `\n\nCONTEXTO DEL USUARIO:\n- Nombre: ${userContext.name || 'No disponible'}\n- ELO: ${userContext.elo}\n- XP: ${userContext.xp}\n- Racha: ${userContext.streak} días\n- Bankroll: ${userContext.bankroll}€\n- Apuestas recientes: ${userContext.recentBets.length > 0 ? userContext.recentBets.map(b => `${b.event_name}: ${b.result} (${b.profit > 0 ? '+' : ''}${b.profit}€)`).join(', ') : 'Sin apuestas recientes'}\n\nSI EL USUARIO PREGUNTA SOBRE SU RENDIMIENTO REAL, analiza sus apuestas con su bankroll y ELO para dar recomendaciones personalizadas. Puedes sugerir ajustes de stake, bankroll management, o detectar patrones (ej. "estás perdiendo en mercados de hándicap").`
   }
 
   if (oddsContext && oddsContext.length > 0) {
     systemPrompt += `\n\nPARTIDOS DISPONIBLES AHORA:\n${oddsContext.map(o => `- ${o.home_team} vs ${o.away_team}: ${o.outcomes.map(out => `${out.name} @${out.price}`).join(', ')}`).join('\n')}\n\nUSA estos datos para responder preguntas sobre partidos específicos. Si el usuario consulta un partido que está en esta lista, proporciona análisis detallado con las cuotas reales.`
   }
+
+  const allMessages: AgentMessage[] = [
+    { role: 'system', content: systemPrompt },
+    ...(memoryMessages || []),
+    ...messages,
+  ]
 
   const response = await fetch(
     'https://openrouter.ai/api/v1/chat/completions',
@@ -79,11 +86,8 @@ export async function chatWithAgent(
       },
       body: JSON.stringify({
         model: 'openai/gpt-4o-mini',
-        messages: [
-          { role: 'system', content: systemPrompt },
-          ...messages,
-        ],
-        stream: true,
+        messages: allMessages,
+        stream: false,
       }),
     }
   )

@@ -90,7 +90,7 @@ export async function POST(req: Request) {
         const { getGradoById } = await import('@/lib/academy/content')
         const grado = getGradoById(gradoId)
         if (grado) {
-          sendNotification(p.email, { type: 'grado_completed', grado: grado.nombre, userName: p.full_name || 'Usuario' })
+          sendNotification(user.id, p.email, { type: 'grado_completed', grado: grado.nombre, userName: p.full_name || 'Usuario' })
         }
       }
     }

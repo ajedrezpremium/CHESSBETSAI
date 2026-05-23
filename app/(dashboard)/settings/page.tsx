@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { ThemeSelector } from '@/components/ThemeSelector'
+import { PushToggle } from '@/components/push/PushToggle'
 import {
   Save, LogOut, User, Send, CheckCircle, XCircle, Loader,
   Lock, Bell, Sun, Moon, Monitor, Crown,
@@ -139,11 +140,7 @@ export default function SettingsPage() {
               <input type="checkbox" checked={emailNotifs} onChange={(e) => setEmailNotifs(e.target.checked)}
                 className="h-4 w-4 accent-amber-500" />
             </label>
-            <label className="flex items-center justify-between rounded-lg bg-zinc-800/30 px-4 py-3">
-              <span className="text-sm text-zinc-300">Notificaciones push</span>
-              <input type="checkbox" checked={pushNotifs} onChange={(e) => setPushNotifs(e.target.checked)}
-                className="h-4 w-4 accent-amber-500" />
-            </label>
+            <PushToggle />
             <label className="flex items-center justify-between rounded-lg bg-zinc-800/30 px-4 py-3">
               <span className="text-sm text-zinc-300">Resumen diario de apuestas</span>
               <input type="checkbox" checked={dailyDigest} onChange={(e) => setDailyDigest(e.target.checked)}
