@@ -7,11 +7,13 @@ import { Button } from '@/components/ui/button'
 import { createClient } from '@/lib/supabase/client'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { ChevronRight, LogOut, User, Menu, X, TriangleAlert } from 'lucide-react'
+import { ChevronRight, LogOut, User, Menu, X, TriangleAlert, Sun, Moon } from 'lucide-react'
+import { useTheme } from '@/components/ThemeProvider'
 
 const navLinks = [
   { href: '/', label: 'Inicio' },
   { href: '/academy', label: 'Academia' },
+  { href: '/apuestas', label: 'Apuestas' },
   { href: '/live', label: 'Live Trading' },
 ]
 
@@ -21,6 +23,7 @@ export function Navbar() {
   const [user, setUser] = useState<any>(null)
   const [menuOpen, setMenuOpen] = useState(false)
   const [supabaseReady, setSupabaseReady] = useState(true)
+  const { theme, setTheme } = useTheme()
 
   useEffect(() => {
     try {
@@ -90,6 +93,19 @@ export function Navbar() {
                 <User className="h-4 w-4" />
                 Dashboard
               </Link>
+              <Link
+                href="/perfil"
+                className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-zinc-400 hover:text-zinc-100"
+              >
+                Perfil
+              </Link>
+              <button
+                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                className="rounded-lg p-2 text-zinc-500 hover:text-zinc-300"
+                title="Cambiar tema"
+              >
+                {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+              </button>
               <button
                 onClick={handleLogout}
                 className="rounded-lg p-2 text-zinc-500 hover:text-zinc-300"
@@ -141,12 +157,27 @@ export function Navbar() {
           ))}
           <div className="mt-3 border-t border-zinc-800 pt-3">
             {user ? (
-              <button
-                onClick={handleLogout}
-                className="flex w-full items-center gap-2 rounded-lg px-4 py-3 text-sm text-red-400"
-              >
-                <LogOut className="h-4 w-4" /> Cerrar Sesión
-              </button>
+              <>
+                <Link
+                  href="/perfil"
+                  onClick={() => setMenuOpen(false)}
+                  className="block rounded-lg px-4 py-3 text-sm text-zinc-400"
+                >
+                  Mi Perfil
+                </Link>
+                <button
+                  onClick={() => { setTheme(theme === 'dark' ? 'light' : 'dark'); setMenuOpen(false) }}
+                  className="flex w-full items-center gap-2 rounded-lg px-4 py-3 text-sm text-zinc-400"
+                >
+                  {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />} Modo {theme === 'dark' ? 'Claro' : 'Oscuro'}
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className="flex w-full items-center gap-2 rounded-lg px-4 py-3 text-sm text-red-400"
+                >
+                  <LogOut className="h-4 w-4" /> Cerrar Sesión
+                </button>
+              </>
             ) : (
               <Link
                 href="/register"

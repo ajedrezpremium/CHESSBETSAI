@@ -1,8 +1,20 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import type { Metadata } from 'next'
 import { ChevronLeft } from 'lucide-react'
 import { getGradoById } from '@/lib/academy/content'
 import { LessonCard } from '@/components/academy/LessonCard'
+import { CertificateButton } from '@/components/academy/CertificateButton'
+
+export async function generateMetadata({ params }: { params: Promise<{ gradoId: string }> }): Promise<Metadata> {
+  const { gradoId } = await params
+  const grado = getGradoById(Number(gradoId))
+  if (!grado) return { title: 'Grado no encontrado — Chess Bets Academy' }
+  return {
+    title: `${grado.nombre} — Chess Bets Academy`,
+    description: `${grado.nombre}: ${grado.descripcion}`,
+  }
+}
 
 export default async function GradoPage({
   params,
@@ -41,16 +53,16 @@ export default async function GradoPage({
       </div>
 
       <div className="space-y-3">
-        {grado.lecciones.map((lesson, index) => (
+        {grado.lecciones.map((lesson) => (
           <LessonCard
             key={lesson.id}
             lesson={lesson}
             gradoId={grado.id}
-            completado={false}
-            bloqueado={index > 0 && false}
           />
         ))}
       </div>
+
+      <CertificateButton gradoId={grado.id} totalLecciones={grado.lecciones.length} />
     </div>
   )
 }

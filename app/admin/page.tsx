@@ -1,7 +1,13 @@
+import type { Metadata } from 'next'
 import { getAdminStats } from '@/lib/admin/service'
 import { Users, DollarSign, Activity, Clock, TrendingUp, Target, Award, Zap } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
+
+export const metadata: Metadata = {
+  title: 'Admin Panel — Chess Bets Academy',
+  description: 'Panel de administración: estadísticas globales, usuarios, cursos y configuración.',
+}
 
 export default async function AdminPage() {
   const stats = await getAdminStats()
@@ -113,6 +119,31 @@ export default async function AdminPage() {
               )}
             </div>
           </div>
+
+          {/* Recent activity */}
+          {stats.recentActivity.length > 0 && (
+            <div className="mb-8 rounded-xl border border-zinc-800 bg-zinc-900/50 p-5">
+              <h3 className="mb-4 flex items-center gap-2 text-sm font-semibold text-zinc-400 uppercase tracking-wider">
+                <Activity className="h-4 w-4" /> Actividad Reciente
+              </h3>
+              <div className="space-y-2">
+                {stats.recentActivity.slice(0, 10).map((a) => (
+                  <div key={a.id} className="flex items-center justify-between rounded-lg bg-zinc-800/30 px-4 py-2">
+                    <div className="flex items-center gap-3">
+                      <span className="text-sm text-zinc-300">{a.event_name}</span>
+                      <span className="text-[10px] text-zinc-600">{a.user_email.slice(0, 8)}</span>
+                    </div>
+                    <div className="flex items-center gap-3 text-xs">
+                      <span className={a.profit >= 0 ? 'text-emerald-500' : 'text-red-500'}>
+                        {a.profit > 0 ? '+' : ''}{a.profit.toFixed(2)}€
+                      </span>
+                      <span className="text-zinc-600">{new Date(a.created_at).toLocaleDateString('es-ES')}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Win Rate bar */}
           {stats.totalBets > 0 && (

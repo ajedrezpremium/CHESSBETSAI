@@ -1,4 +1,6 @@
+import { StatCard } from '@/components/ui/StatCard'
 import Link from 'next/link'
+import type { Metadata } from 'next'
 import { getDashboardStats, getProfile } from '@/lib/stats/service'
 import {
   BookOpen,
@@ -10,33 +12,14 @@ import {
   Trophy,
   Wallet,
   Activity,
+  User,
 } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
-function StatCard({
-  icon: Icon,
-  label,
-  value,
-  color,
-  sub,
-}: {
-  icon: any
-  label: string
-  value: string | number
-  color: string
-  sub?: string
-}) {
-  return (
-    <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-5">
-      <div className="mb-3 flex items-center justify-between">
-        <Icon className={`h-5 w-5 ${color}`} />
-      </div>
-      <div className="text-2xl font-bold text-zinc-100">{value}</div>
-      <div className="text-sm text-zinc-500">{label}</div>
-      {sub && <div className="mt-1 text-xs text-zinc-600">{sub}</div>}
-    </div>
-  )
+export const metadata: Metadata = {
+  title: 'Dashboard — Chess Bets Academy',
+  description: 'Resumen de tu actividad: bankroll, ROI, racha, apuestas recientes y estadísticas en vivo.',
 }
 
 export default async function Dashboard() {
@@ -179,7 +162,7 @@ export default async function Dashboard() {
         </>
       )}
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-3">
         <Link
           href="/academy"
           className="group flex items-center justify-between rounded-xl border border-zinc-800 bg-zinc-900/50 p-5 transition-all hover:border-zinc-700"
@@ -188,9 +171,7 @@ export default async function Dashboard() {
             <BookOpen className="h-5 w-5 text-amber-500" />
             <div>
               <div className="font-semibold text-zinc-100">Ir a la Academia</div>
-              <div className="text-sm text-zinc-500">
-                Continúa tu formación
-              </div>
+              <div className="text-sm text-zinc-500">Continúa tu formación</div>
             </div>
           </div>
           <ChevronRight className="h-5 w-5 text-zinc-600 transition-transform group-hover:translate-x-1" />
@@ -203,9 +184,20 @@ export default async function Dashboard() {
             <BarChart3 className="h-5 w-5 text-emerald-500" />
             <div>
               <div className="font-semibold text-zinc-100">Live Trading</div>
-              <div className="text-sm text-zinc-500">
-                Analiza partidos y detecta value bets
-              </div>
+              <div className="text-sm text-zinc-500">Analiza partidos y detecta value bets</div>
+            </div>
+          </div>
+          <ChevronRight className="h-5 w-5 text-zinc-600 transition-transform group-hover:translate-x-1" />
+        </Link>
+        <Link
+          href="/perfil"
+          className="group flex items-center justify-between rounded-xl border border-zinc-800 bg-zinc-900/50 p-5 transition-all hover:border-zinc-700"
+        >
+          <div className="flex items-center gap-3">
+            <User className="h-5 w-5 text-purple-500" />
+            <div>
+              <div className="font-semibold text-zinc-100">Mi Perfil</div>
+              <div className="text-sm text-zinc-500">Estadísticas, historial y logros</div>
             </div>
           </div>
           <ChevronRight className="h-5 w-5 text-zinc-600 transition-transform group-hover:translate-x-1" />

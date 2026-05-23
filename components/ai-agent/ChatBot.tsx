@@ -2,9 +2,18 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { ChatMessage } from './ChatMessage'
-import { Button } from '@/components/ui/button'
+import { SuggestedQuestions } from './SuggestedQuestions'
 import type { ChatMessage as ChatMessageType } from '@/types'
 import { MessageCircle, X, Send, Brain } from 'lucide-react'
+
+const SUGGESTIONS = [
+  '¿Qué partidos tienen mejor value hoy?',
+  'Analiza el Barcelona vs Real Madrid',
+  '¿Cómo gestionar mi bankroll?',
+  'Explica el Kelly Criterion',
+  '¿Qué es una value bet?',
+  'Estrategias para live betting',
+]
 
 export function ChatBot() {
   const [open, setOpen] = useState(false)
@@ -12,25 +21,29 @@ export function ChatBot() {
     {
       id: '0',
       role: 'assistant',
-      content: '¡Hola! Soy Live Sports Bets AI. Estoy aquí para analizar partidos en vivo, detectar value bets y ayudarte en tu formación. ¿En qué puedo ayudarte?',
+      content: '¡Hola! Soy **Live Sports Bets AI**. Estoy aquí para analizar partidos en vivo, detectar value bets y ayudarte en tu formación. ¿En qué puedo ayudarte?',
       timestamp: Date.now(),
     },
   ])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
+  const [showSuggestions, setShowSuggestions] = useState(true)
   const endRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
-  const handleSend = async () => {
-    if (!input.trim() || loading) return
+  const handleSend = async (text?: string) => {
+    const msg = (text || input).trim()
+    if (!msg || loading) return
+
+    setShowSuggestions(false)
 
     const userMsg: ChatMessageType = {
       id: Date.now().toString(),
       role: 'user',
-      content: input,
+      content: msg,
       timestamp: Date.now(),
     }
 
@@ -44,7 +57,6 @@ export function ChatBot() {
     try {
       let reply = ''
 
-      // Try Render first, fallback to local Next.js API
       try {
         const res = await fetch(RENDER_API, {
           method: 'POST',
@@ -81,12 +93,7 @@ export function ChatBot() {
               const assistantId = (Date.now() + 1).toString()
               setMessages((prev) => [
                 ...prev,
-                {
-                  id: assistantId,
-                  role: 'assistant',
-                  content: '',
-                  timestamp: Date.now(),
-                },
+                { id: assistantId, role: 'assistant', content: '', timestamp: Date.now() },
               ])
               while (true) {
                 const { done, value } = await reader.read()
@@ -116,7 +123,6 @@ export function ChatBot() {
         } catch {}
       }
 
-      // Render response (non-streaming)
       if (reply) {
         setMessages((prev) => [
           ...prev,
@@ -131,7 +137,7 @@ export function ChatBot() {
         {
           id: Date.now().toString(),
           role: 'assistant',
-          content: 'Lo siento, hubo un error. Intenta de nuevo.',
+          content: 'Lo siento, hubo un error al comunicarme con el servidor. Intenta de nuevo.',
           timestamp: Date.now(),
         },
       ])
@@ -161,14 +167,9 @@ export function ChatBot() {
           <div className="flex items-center justify-between border-b border-zinc-700 px-4 py-3">
             <div className="flex items-center gap-2">
               <Brain className="h-5 w-5 text-amber-500" />
-              <span className="text-sm font-semibold text-zinc-100">
-                Live Sports Bets AI
-              </span>
+              <span className="text-sm font-semibold text-zinc-100">Live Sports Bets AI</span>
             </div>
-            <button
-              onClick={() => setOpen(false)}
-              className="rounded-lg p-1 text-zinc-500 hover:text-zinc-300"
-            >
+            <button onClick={() => setOpen(false)} className="rounded-lg p-1 text-zinc-500 hover:text-zinc-300">
               <X className="h-5 w-5" />
             </button>
           </div>
@@ -177,13 +178,22 @@ export function ChatBot() {
             {messages.map((msg) => (
               <ChatMessage key={msg.id} message={msg} />
             ))}
+
+            {showSuggestions && messages.length === 1 && (
+              <SuggestedQuestions
+                questions={SUGGESTIONS}
+                onSelect={(q) => handleSend(q)}
+              />
+            )}
+
             {loading && (
-              <div className="flex items-center gap-2 text-sm text-zinc-500">
+              <div className="flex items-center gap-2 pl-2">
                 <div className="flex gap-1">
                   <div className="h-2 w-2 animate-bounce rounded-full bg-amber-500" />
                   <div className="h-2 w-2 animate-bounce rounded-full bg-amber-500 [animation-delay:0.1s]" />
                   <div className="h-2 w-2 animate-bounce rounded-full bg-amber-500 [animation-delay:0.2s]" />
                 </div>
+                <span className="text-xs text-zinc-500">Analizando...</span>
               </div>
             )}
             <div ref={endRef} />
@@ -199,7 +209,7 @@ export function ChatBot() {
                 className="flex-1 rounded-xl border border-zinc-700 bg-zinc-800 px-4 py-2 text-sm text-zinc-100 placeholder-zinc-500 outline-none focus:border-amber-500/50"
               />
               <button
-                onClick={handleSend}
+                onClick={() => handleSend()}
                 disabled={loading || !input.trim()}
                 className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500 text-black disabled:opacity-50"
               >

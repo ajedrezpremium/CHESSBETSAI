@@ -43,11 +43,13 @@ export async function getWebhookInfo() {
 }
 
 const commands = [
-  { command: 'start', description: 'Conectar tu cuenta de Chess Bets Academy' },
+  { command: 'start', description: 'Inicio y conectar cuenta' },
+  { command: 'connect', description: 'Vincular con código de conexión' },
   { command: 'help', description: 'Mostrar ayuda' },
-  { command: 'alerts', description: 'Activar/desactivar alertas de value bets' },
-  { command: 'resumen', description: 'Recibir resumen diario de apuestas' },
-  { command: 'stop', description: 'Detener todas las notificaciones' },
+  { command: 'analizar', description: 'Analizar un partido con IA' },
+  { command: 'alerts', description: 'Activar/desactivar alertas value bets' },
+  { command: 'resumen', description: 'Mis estadísticas y apuestas' },
+  { command: 'stop', description: 'Desconectar y detener notificaciones' },
 ]
 
 export async function setCommands() {

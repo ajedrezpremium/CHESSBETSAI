@@ -1,7 +1,9 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { Shield, User, Search } from 'lucide-react'
+import { useState, useEffect, useCallback } from 'react'
+import { Shield, User, Search, CheckCircle, XCircle } from 'lucide-react'
+
+const PLANS_LIST = ['free', 'pro', 'elite'] as const
 
 interface AdminUser {
   id: string
@@ -11,7 +13,13 @@ interface AdminUser {
   elo: number
   xp: number
   streak: number
+  membership_plan: string
   created_at: string
+}
+
+interface Toast {
+  type: 'success' | 'error'
+  message: string
 }
 
 export default function AdminUsuariosPage() {
@@ -19,10 +27,19 @@ export default function AdminUsuariosPage() {
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [toggleId, setToggleId] = useState<string | null>(null)
+  const [changingPlan, setChangingPlan] = useState<string | null>(null)
+  const [toast, setToast] = useState<Toast | null>(null)
 
   useEffect(() => {
     fetchUsers()
   }, [])
+
+  useEffect(() => {
+    if (toast) {
+      const t = setTimeout(() => setToast(null), 3000)
+      return () => clearTimeout(t)
+    }
+  }, [toast])
 
   const fetchUsers = async () => {
     setLoading(true)
@@ -34,19 +51,26 @@ export default function AdminUsuariosPage() {
     setLoading(false)
   }
 
-  const toggleRole = async (userId: string, currentRole: string) => {
+  const toggleRole = useCallback(async (userId: string, currentRole: string) => {
+    const action = currentRole === 'admin' ? 'quitarle permisos de admin' : 'hacerlo admin'
+    if (!window.confirm(`¿Estás seguro de ${action} a este usuario?`)) return
+
     setToggleId(userId)
     const newRole = currentRole === 'admin' ? 'student' : 'admin'
     try {
-      await fetch('/admin/api/users', {
+      const res = await fetch('/admin/api/users', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId, role: newRole }),
       })
+      if (!res.ok) throw new Error()
       setUsers((prev) => prev.map((u) => (u.id === userId ? { ...u, role: newRole } : u)))
-    } catch {}
+      setToast({ type: 'success', message: `Rol actualizado a ${newRole}` })
+    } catch {
+      setToast({ type: 'error', message: 'Error al actualizar rol' })
+    }
     setToggleId(null)
-  }
+  }, [])
 
   const filtered = users.filter((u) =>
     (u.full_name || '').toLowerCase().includes(search.toLowerCase()) ||
@@ -55,6 +79,17 @@ export default function AdminUsuariosPage() {
 
   return (
     <div className="p-6">
+      {toast && (
+        <div className={`mb-4 flex items-center gap-2 rounded-xl border px-4 py-3 text-sm ${
+          toast.type === 'success'
+            ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-400'
+            : 'border-red-500/20 bg-red-500/10 text-red-400'
+        }`}>
+          {toast.type === 'success' ? <CheckCircle className="h-4 w-4" /> : <XCircle className="h-4 w-4" />}
+          {toast.message}
+        </div>
+      )}
+
       <div className="mb-8 flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-zinc-100">Usuarios</h1>
@@ -73,7 +108,19 @@ export default function AdminUsuariosPage() {
       </div>
 
       {loading ? (
-        <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-8 text-center text-sm text-zinc-500">Cargando...</div>
+        <div className="space-y-3">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <div key={i} className="flex items-center gap-4 rounded-xl border border-zinc-800 bg-zinc-900/50 p-4">
+              <div className="h-7 w-7 animate-pulse rounded-full bg-zinc-800" />
+              <div className="h-4 flex-1 animate-pulse rounded bg-zinc-800" />
+              <div className="h-4 w-24 animate-pulse rounded bg-zinc-800" />
+              <div className="h-4 w-12 animate-pulse rounded bg-zinc-800" />
+              <div className="h-4 w-12 animate-pulse rounded bg-zinc-800" />
+              <div className="h-4 w-16 animate-pulse rounded bg-zinc-800" />
+              <div className="h-6 w-20 animate-pulse rounded bg-zinc-800" />
+            </div>
+          ))}
+        </div>
       ) : filtered.length === 0 ? (
         <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-8 text-center text-sm text-zinc-500">
           {search ? 'Sin resultados' : 'No hay usuarios registrados'}
@@ -89,6 +136,7 @@ export default function AdminUsuariosPage() {
                 <th className="px-4 py-3 text-left font-medium text-zinc-400">ELO</th>
                 <th className="px-4 py-3 text-left font-medium text-zinc-400">XP</th>
                 <th className="px-4 py-3 text-left font-medium text-zinc-400">Racha</th>
+                <th className="px-4 py-3 text-left font-medium text-zinc-400">Plan</th>
                 <th className="px-4 py-3 text-left font-medium text-zinc-400">Acción</th>
               </tr>
             </thead>
@@ -116,6 +164,35 @@ export default function AdminUsuariosPage() {
                   <td className="px-4 py-3 text-zinc-300">{u.elo || 1000}</td>
                   <td className="px-4 py-3 text-amber-500">{u.xp || 0}</td>
                   <td className="px-4 py-3 text-zinc-400">{u.streak || 0} días</td>
+                  <td className="px-4 py-3">
+                    <select
+                      value={u.membership_plan || 'free'}
+                      onChange={async (e) => {
+                        const plan = e.target.value
+                        if (!window.confirm(`¿Cambiar plan de ${u.full_name || u.email} a ${plan}?`)) return
+                        setChangingPlan(u.id)
+                        try {
+                          const res = await fetch('/admin/api/users', {
+                            method: 'PATCH',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ userId: u.id, membership_plan: plan }),
+                          })
+                          if (!res.ok) throw new Error()
+                          setUsers((prev) => prev.map((p) => p.id === u.id ? { ...p, membership_plan: plan } : p))
+                          setToast({ type: 'success', message: `Plan cambiado a ${plan}` })
+                        } catch {
+                          setToast({ type: 'error', message: 'Error al cambiar plan' })
+                        }
+                        setChangingPlan(null)
+                      }}
+                      disabled={changingPlan === u.id}
+                      className="rounded-md border border-zinc-700 bg-zinc-800 px-2 py-1 text-xs text-zinc-200 focus:border-amber-500/50 outline-none"
+                    >
+                      {PLANS_LIST.map((p) => (
+                        <option key={p} value={p}>{p.charAt(0).toUpperCase() + p.slice(1)}</option>
+                      ))}
+                    </select>
+                  </td>
                   <td className="px-4 py-3">
                     <button
                       onClick={() => toggleRole(u.id, u.role)}

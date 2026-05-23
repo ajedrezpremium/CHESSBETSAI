@@ -5,8 +5,14 @@ import Link from 'next/link'
 import { LiveEventCard } from '@/components/live/LiveEventCard'
 import { ValueBetCard } from '@/components/live/ValueBetCard'
 import { Button } from '@/components/ui/button'
+import type { Metadata } from 'next'
 
 export const dynamic = 'force-dynamic'
+
+export const metadata: Metadata = {
+  title: 'Live Trading — Chess Bets Academy',
+  description: 'Cuotas en vivo de más de 10 ligas. Value bets, mejores cuotas y análisis en tiempo real con IA.',
+}
 
 export default async function LivePage() {
   const apiKey = process.env.ODDS_API_KEY

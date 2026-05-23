@@ -1,3 +1,10 @@
+export interface QuizQuestion {
+  pregunta: string
+  opciones: string[]
+  correcta: number
+  explicacion: string
+}
+
 export interface Lesson {
   id: string
   gradoId: number
@@ -6,6 +13,7 @@ export interface Lesson {
   contenido: string
   duracion: string
   order: number
+  quiz: QuizQuestion[]
 }
 
 export interface GradoData {
@@ -25,6 +33,41 @@ const leccionesGrado1: Lesson[] = [
     descripcion: 'Entiende el concepto fundamental de las apuestas deportivas.',
     duracion: '15 min',
     order: 1,
+    quiz: [
+      {
+        pregunta: '¿Qué representa la cuota en una apuesta deportiva?',
+        opciones: [
+          'La probabilidad real del evento',
+          'La probabilidad implícita calculada por la casa',
+          'El dinero que vas a ganar seguro',
+          'El margen de la casa',
+        ],
+        correcta: 1,
+        explicacion: 'La cuota representa la probabilidad implícita que la casa de apuestas asigna a un resultado, no necesariamente la probabilidad real.',
+      },
+      {
+        pregunta: 'Si una cuota es 2.10, ¿cuál es su probabilidad implícita?',
+        opciones: [
+          '21%',
+          '47.6%',
+          '52.4%',
+          '10%',
+        ],
+        correcta: 1,
+        explicacion: 'La probabilidad implícita se calcula como 1 / cuota × 100 = 1 / 2.10 × 100 = 47.6%.',
+      },
+      {
+        pregunta: '¿Qué tipo de cuota se usa comúnmente en Europa?',
+        opciones: [
+          'Fraccionarias',
+          'Americanas',
+          'Decimales',
+          'Hong Kong',
+        ],
+        correcta: 2,
+        explicacion: 'En Europa se usan las cuotas decimales, donde multiplicas tu stake directamente por la cuota.',
+      },
+    ],
     contenido: `## ¿Qué es una cuota?
 
 La **cuota** es el número que la casa de apuestas asigna a un resultado. Representa:
@@ -65,6 +108,41 @@ Esta fórmula es la base de todo. Sin ella, no puedes detectar valor.`,
     descripcion: 'Aprende a detectar apuestas con valor esperado positivo.',
     duracion: '20 min',
     order: 2,
+    quiz: [
+      {
+        pregunta: '¿Cuándo ocurre una value bet?',
+        opciones: [
+          'Cuando la cuota es mayor que 2.00',
+          'Cuando tu probabilidad estimada es mayor que la probabilidad implícita',
+          'Cuando el equipo favorito va ganando',
+          'Cuando apuestas en vivo',
+        ],
+        correcta: 1,
+        explicacion: 'Una value bet ocurre cuando tu probabilidad estimada es mayor que la probabilidad implícita de la cuota.',
+      },
+      {
+        pregunta: '¿Cuál es la fórmula del valor esperado?',
+        opciones: [
+          'Valor = Cuota / Probabilidad Real',
+          'Valor = (Probabilidad Real × Cuota) - 1',
+          'Valor = Probabilidad Real - Cuota',
+          'Valor = 1 / Cuota × 100',
+        ],
+        correcta: 1,
+        explicacion: 'Valor = (Probabilidad Real × Cuota) - 1. Si el resultado es positivo, tienes una value bet.',
+      },
+      {
+        pregunta: '¿Por qué existen las value bets?',
+        opciones: [
+          'Porque las casas quieren regalar dinero',
+          'Por errores del bookmaker y sobre-reacción del público',
+          'Porque siempre hay un equipo mejor que otro',
+          'Porque las cuotas son aleatorias',
+        ],
+        correcta: 1,
+        explicacion: 'Las value bets existen por errores del bookmaker, sobre-reacción del público y otros factores del mercado.',
+      },
+    ],
     contenido: `## Value Betting
 
 Una **value bet** ocurre cuando tu probabilidad estimada es **mayor** que la probabilidad implícita de la cuota.
@@ -104,6 +182,41 @@ Esto significa que por cada 10€ apostados, tu expectativa matemática es de +1
     descripcion: 'El pilar más importante para la sostenibilidad a largo plazo.',
     duracion: '20 min',
     order: 3,
+    quiz: [
+      {
+        pregunta: '¿Qué porcentaje del bankroll se recomienda apostar como máximo en una sola apuesta?',
+        opciones: [
+          '10-15%',
+          '1-5%',
+          '20-30%',
+          '50%',
+        ],
+        correcta: 1,
+        explicacion: 'La regla de oro es nunca apostar más del 1-5% del bankroll en una sola apuesta.',
+      },
+      {
+        pregunta: '¿Qué método de stake ajusta el tamaño según el valor detectado?',
+        opciones: [
+          'Flat Betting',
+          'Stake por nivel de confianza',
+          'Kelly Criterion',
+          'Martingala',
+        ],
+        correcta: 2,
+        explicacion: 'El Kelly Criterion ajusta el stake según el valor detectado usando la fórmula: (Probabilidad Real × Cuota - 1) / (Cuota - 1).',
+      },
+      {
+        pregunta: '¿Por qué se recomienda usar Kelly fraccionado en lugar de Kelly completo?',
+        opciones: [
+          'Porque Kelly completo es demasiado conservador',
+          'Porque Kelly completo es muy agresivo',
+          'Porque Kelly completo no funciona',
+          'Porque Kelly fraccionado da más beneficio',
+        ],
+        correcta: 1,
+        explicacion: 'Kelly completo es muy agresivo, por eso se recomienda usar Kelly fraccionado al 25-50%.',
+      },
+    ],
     contenido: `## Gestión de Bankroll
 
 Sin una gestión de bankroll disciplinada, **vas a perder todo tu dinero**, incluso si aciertas el 60% de tus apuestas.
@@ -157,6 +270,41 @@ Ejemplo: Prob real 55%, cuota 2.10
     descripcion: 'Domina los diferentes mercados de apuestas y su interpretación.',
     duracion: '15 min',
     order: 4,
+    quiz: [
+      {
+        pregunta: '¿Qué significa "X" en el mercado 1X2?',
+        opciones: [
+          'Victoria local',
+          'Victoria visitante',
+          'Empate',
+          'Doble oportunidad',
+        ],
+        correcta: 2,
+        explicacion: 'En el mercado 1X2, 1 es victoria local, X es empate y 2 es victoria visitante.',
+      },
+      {
+        pregunta: '¿Qué significa un hándicap asiático -1.5?',
+        opciones: [
+          'El equipo debe perder por 2+ goles',
+          'El equipo debe ganar por 2+ goles',
+          'El equipo puede perder por 1 gol y la apuesta gana',
+          'El equipo debe empatar',
+        ],
+        correcta: 1,
+        explicacion: 'Hándicap -1.5 significa que el equipo debe ganar por 2 o más goles para que la apuesta sea ganadora.',
+      },
+      {
+        pregunta: 'Si las probabilidades implícitas suman 103.3%, ¿cuál es el margen de la casa?',
+        opciones: [
+          '0%',
+          '3.3%',
+          '6.6%',
+          '100%',
+        ],
+        correcta: 1,
+        explicacion: 'El margen se calcula como la suma de probabilidades implícitas menos 100%: 103.3% - 100% = 3.3%.',
+      },
+    ],
     contenido: `## Probabilidades y Mercados
 
 ### Mercados principales
@@ -204,6 +352,41 @@ Un margen bajo (<3%) es bueno para el apostador.`,
     descripcion: 'Configura tu cuenta y prepara tu entorno de trabajo.',
     duracion: '10 min',
     order: 5,
+    quiz: [
+      {
+        pregunta: '¿Cuál es la primera actividad recomendada para tu primera semana?',
+        opciones: [
+          'Apostar dinero real',
+          'Completar Grado 1, Lecciones 1-2',
+          'Crear un modelo de ML',
+          'Buscar sindicatos',
+        ],
+        correcta: 1,
+        explicacion: 'El día 1 de tu primera semana debes completar Grado 1, Lecciones 1-2.',
+      },
+      {
+        pregunta: '¿Cuál de estas NO es una herramienta recomendada?',
+        opciones: [
+          'Odds Portal',
+          'FlashScore',
+          'CoinMarketCap',
+          'SofaScore',
+        ],
+        correcta: 2,
+        explicacion: 'CoinMarketCap es para criptomonedas, no para apuestas deportivas.',
+      },
+      {
+        pregunta: '¿Cuál es la mentalidad inicial correcta?',
+        opciones: [
+          'Voy a hacerme rico rápido',
+          'Voy a aprender un oficio, no hacerme rico rápido',
+          'Voy a apostar todo en un solo partido',
+          'Voy a seguir a tipsters famosos',
+        ],
+        correcta: 1,
+        explicacion: 'La mentalidad es: "No voy a hacerme rico rápido. Voy a aprender un oficio."',
+      },
+    ],
     contenido: `## Registro y Primeros Pasos
 
 ### Checklist inicial
@@ -249,6 +432,41 @@ const leccionesGrado2: Lesson[] = [
     descripcion: 'Conoce los sesgos cognitivos que te hacen perder dinero.',
     duracion: '20 min',
     order: 1,
+    quiz: [
+      {
+        pregunta: '¿Cuál es la principal causa de que el 80% de los apostadores pierda dinero?',
+        opciones: [
+          'Falta de conocimiento técnico',
+          'Falta de control emocional',
+          'Malas cuotas',
+          'Poca variedad de mercados',
+        ],
+        correcta: 1,
+        explicacion: 'El 80% pierde dinero no por falta de conocimiento, sino por falta de control emocional.',
+      },
+      {
+        pregunta: '¿En qué consiste el sesgo de confirmación?',
+        opciones: [
+          'Buscar información que contradiga tu apuesta',
+          'Buscar información que confirme tu apuesta e ignorar la que la contradice',
+          'Apostar siempre al equipo local',
+          'Confiar ciegamente en las cuotas de la casa',
+        ],
+        correcta: 1,
+        explicacion: 'El sesgo de confirmación te lleva a buscar información que confirme tu apuesta e ignorar la que la contradice.',
+      },
+      {
+        pregunta: '¿Cuánto duele perder 10€ en comparación con ganar 10€?',
+        opciones: [
+          'Lo mismo',
+          'La mitad',
+          'El doble',
+          'No duele si tienes bankroll grande',
+        ],
+        correcta: 2,
+        explicacion: 'La aversión a la pérdida hace que perder 10€ duela el doble de lo que alegra ganar 10€.',
+      },
+    ],
     contenido: `## Psicología del Apostador
 
 ### El enemigo eres tú
@@ -292,6 +510,41 @@ Pregúntate antes de cada apuesta:
     descripcion: 'Aprende a identificar y gestionar el tilt emocional.',
     duracion: '15 min',
     order: 2,
+    quiz: [
+      {
+        pregunta: '¿Qué es el tilt en el contexto de apuestas?',
+        opciones: [
+          'Una estrategia de apuestas avanzada',
+          'Un estado emocional negativo que lleva a decisiones irracionales',
+          'Un tipo de cuota en exchanges',
+          'Una herramienta de análisis',
+        ],
+        correcta: 1,
+        explicacion: 'El tilt es un estado emocional negativo que te lleva a tomar decisiones irracionales.',
+      },
+      {
+        pregunta: '¿Cuál es el primer paso del protocolo anti-tilt?',
+        opciones: [
+          'Aumentar el stake para recuperarte',
+          'Reconocer que estás en tilt',
+          'Cerrar la app para siempre',
+          'Hacer más apuestas para diluir las pérdidas',
+        ],
+        correcta: 1,
+        explicacion: 'El primer paso es reconocerlo: "Estoy en tilt".',
+      },
+      {
+        pregunta: '¿Qué debes hacer inmediatamente después de reconocer el tilt?',
+        opciones: [
+          'Apostar más para recuperarte rápido',
+          'Alejarte de la app por al menos 30 minutos',
+          'Cambiar de deporte',
+          'Revisar estadísticas de otros partidos',
+        ],
+        correcta: 1,
+        explicacion: 'El segundo paso es alejarte: cierra la app por al menos 30 minutos.',
+      },
+    ],
     contenido: `## Control del Tilt
 
 ### ¿Qué es el tilt?
@@ -335,6 +588,41 @@ Lleva un registro de tu estado emocional junto a cada apuesta:
     descripcion: 'Crea hábitos de trader profesional.',
     duracion: '15 min',
     order: 3,
+    quiz: [
+      {
+        pregunta: '¿Cuánto tiempo antes del partido debe comenzar tu rutina de análisis?',
+        opciones: [
+          '30 minutos',
+          '1 hora',
+          '2 horas',
+          'Justo antes del partido',
+        ],
+        correcta: 2,
+        explicacion: 'La rutina del trader profesional comienza 2 horas antes del partido.',
+      },
+      {
+        pregunta: '¿Cuál es el stake máximo recomendado para apuestas normales?',
+        opciones: [
+          '1%',
+          '3%',
+          '5%',
+          '10%',
+        ],
+        correcta: 1,
+        explicacion: 'La regla de disciplina indica stake máximo del 3% en apuestas normales y 5% en altísima confianza.',
+      },
+      {
+        pregunta: '¿Cuántas apuestas al día se recomiendan como máximo?',
+        opciones: [
+          '1-2',
+          '3-5',
+          '10-15',
+          'Las que quieras mientras sean value',
+        ],
+        correcta: 1,
+        explicacion: 'Se recomienda un máximo de 3-5 apuestas al día, priorizando calidad sobre cantidad.',
+      },
+    ],
     contenido: `## Disciplina y Rutina
 
 ### La rutina del trader profesional
@@ -377,6 +665,41 @@ Mantén un registro impecable. Si no lo mides, no lo mejoras.
     descripcion: 'Pon a prueba tu preparación mental.',
     duracion: '10 min',
     order: 4,
+    quiz: [
+      {
+        pregunta: 'Has perdido 3 apuestas seguidas. Según la lección, ¿qué deberías hacer?',
+        opciones: [
+          'Aumentar el stake para recuperarte',
+          'Seguir con tu plan normal o dejar de apostar por hoy',
+          'Apostar a más partidos simultáneamente',
+          'Cambiar de deporte',
+        ],
+        correcta: 1,
+        explicacion: 'Perseguir pérdidas es el camino a la ruina. Debes seguir tu plan o detenerte.',
+      },
+      {
+        pregunta: 'Si tu equipo favorito juega y ves una cuota alta, ¿qué deberías hacer?',
+        opciones: [
+          'Apostar porque los conoces bien',
+          'Analizar objetivamente si hay value o no apostar por sesgo',
+          'Apostar el doble por seguridad',
+          'Seguir a otros apostadores',
+        ],
+        correcta: 1,
+        explicacion: 'Apostar a tu equipo introduce sesgo emocional. Debes analizar objetivamente o no apostar.',
+      },
+      {
+        pregunta: 'Ganas 5 apuestas seguidas. ¿Cuál es la mejor reacción?',
+        opciones: [
+          'Aumentar stakes porque estás en racha',
+          'Seguir igual o retirar beneficios',
+          'Apostar todo tu bankroll',
+          'Compartir tus picks en redes sociales',
+        ],
+        correcta: 1,
+        explicacion: 'El éxito pasado no garantiza el futuro. Debes seguir tu plan igual o retirar beneficios.',
+      },
+    ],
     contenido: `## Test de Psicología
 
 Responde estas preguntas con honestidad:
@@ -417,6 +740,41 @@ const leccionesGrado3: Lesson[] = [
     descripcion: 'Aprende a leer el flujo del partido y detectar cambios de tendencia.',
     duracion: '20 min',
     order: 1,
+    quiz: [
+      {
+        pregunta: '¿Qué es el momentum en un partido?',
+        opciones: [
+          'El marcador actual del partido',
+          'La tendencia momentánea de un equipo durante el partido',
+          'La cantidad de goles esperados',
+          'La posesión total del balón',
+        ],
+        correcta: 1,
+        explicacion: 'El momentum es la tendencia momentánea de un equipo durante un partido, que no siempre coincide con el marcador.',
+      },
+      {
+        pregunta: '¿Cuál es una señal de momentum positivo a favor de un equipo?',
+        opciones: [
+          'Llevan 10+ minutos sin disparar a puerta',
+          'El portero rival hace 2 paradas seguidas',
+          'El rival domina la posesión al 65%',
+          'Una tarjeta roja',
+        ],
+        correcta: 1,
+        explicacion: 'Que el portero rival haga 2 paradas seguidas indica que tu equipo está generando ocasiones y tiene momentum.',
+      },
+      {
+        pregunta: '¿Qué rango de minutos suele ser crítico para detectar oportunidades en vivo?',
+        opciones: [
+          'Minuto 1-15',
+          'Minuto 30-45',
+          'Minuto 70-80',
+          'Minuto 85-90',
+        ],
+        correcta: 2,
+        explicacion: 'El minuto 70-80 suele ser crítico, donde la fatiga y los cambios tácticos crean oportunidades de value.',
+      },
+    ],
     contenido: `## Momentum en Vivo
 
 ### ¿Qué es el momentum?
@@ -461,6 +819,41 @@ Cuando detectes momentum claro de un equipo:
     descripcion: 'Analiza formaciones, cambios tácticos y su impacto en las cuotas.',
     duracion: '20 min',
     order: 2,
+    quiz: [
+      {
+        pregunta: '¿Qué formación se considera defensiva y orientada al contraataque?',
+        opciones: [
+          '4-3-3',
+          '5-3-2',
+          '4-4-2',
+          '3-4-3',
+        ],
+        correcta: 1,
+        explicacion: 'La formación 5-3-2 es defensiva y orientada al contraataque, mientras que 4-3-3 es ofensiva y 4-4-2 es equilibrada.',
+      },
+      {
+        pregunta: '¿Qué impacto tiene una tarjeta roja en la efectividad de un equipo?',
+        opciones: [
+          'No tiene impacto significativo',
+          'El equipo pierde aproximadamente un 30% de efectividad',
+          'El equipo juega mejor con 10',
+          'La efectividad se duplica',
+        ],
+        correcta: 1,
+        explicacion: 'Una tarjeta roja reduce la efectividad del equipo aproximadamente un 30%.',
+      },
+      {
+        pregunta: '¿Qué significa PPDA en el análisis táctico?',
+        opciones: [
+          'Goles esperados por partido',
+          'Presión del equipo (bajo = mucha presión)',
+          'Porcentaje de pases acertados',
+          'Posesión en área rival',
+        ],
+        correcta: 1,
+        explicacion: 'PPDA mide la presión del equipo; un valor bajo indica mucha presión.',
+      },
+    ],
     contenido: `## Lectura Táctica
 
 ### Elementos tácticos clave
@@ -510,6 +903,41 @@ Detectas que el equipo visitante:
     descripcion: 'Factores externos que afectan el rendimiento de los equipos.',
     duracion: '15 min',
     order: 3,
+    quiz: [
+      {
+        pregunta: '¿Qué efecto suele tener un partido de Champions en el rendimiento del siguiente partido de liga?',
+        opciones: [
+          'Mejora el rendimiento',
+          'Posible bajón físico por fatiga',
+          'No tiene efecto',
+          'Solo afecta si pierden',
+        ],
+        correcta: 1,
+        explicacion: 'Un equipo que jugó Champions puede tener un bajón físico en el siguiente partido de liga.',
+      },
+      {
+        pregunta: '¿Cómo afecta la lluvia intensa al número de goles esperados?',
+        opciones: [
+          'Aumenta los goles',
+          'Reduce los goles y aumenta los errores',
+          'No afecta',
+          'Solo afecta en el primer tiempo',
+        ],
+        correcta: 1,
+        explicacion: 'La lluvia intensa tiende a reducir los goles y aumentar los errores.',
+      },
+      {
+        pregunta: '¿Cuántos factores contextuales relevantes se necesitan para que el contexto sea significativo?',
+        opciones: [
+          '1 o más',
+          '3 o más',
+          '5 o más',
+          'Ninguno, el contexto no importa',
+        ],
+        correcta: 1,
+        explicacion: 'Si respondes "sí" a 3 o más preguntas de la lista mental pre-apuesta, el contexto es relevante.',
+      },
+    ],
     contenido: `## Análisis Contextual
 
 ### Factores pre-partido
@@ -561,6 +989,41 @@ const leccionesGrado4: Lesson[] = [
     descripcion: 'Entrada y salida en mercados en vivo.',
     duracion: '20 min',
     order: 1,
+    quiz: [
+      {
+        pregunta: '¿Por qué el live betting suele ser más rentable que el pre-partido?',
+        opciones: [
+          'Porque hay más partidos disponibles',
+          'Por sobre-reacción del mercado y menor eficiencia',
+          'Porque las cuotas son fijas',
+          'Porque no hay margen de la casa',
+        ],
+        correcta: 1,
+        explicacion: 'El live betting es más rentable por la sobre-reacción del mercado y porque hay menos modelos cuantitativos en vivo.',
+      },
+      {
+        pregunta: '¿Cuánto tiempo deberías esperar después de un gol temprano para evaluar una entrada?',
+        opciones: [
+          'Inmediatamente después del gol',
+          '3-5 minutos a que se estabilice la cuota',
+          '10-15 minutos',
+          'Hasta el descanso',
+        ],
+        correcta: 1,
+        explicacion: 'Tras un gol temprano, se recomienda esperar 3-5 minutos a que la volatilidad se estabilice.',
+      },
+      {
+        pregunta: '¿Cuál es el stop-loss diario recomendado en live betting?',
+        opciones: [
+          '2% del bankroll',
+          '5% del bankroll',
+          '10% del bankroll',
+          '20% del bankroll',
+        ],
+        correcta: 1,
+        explicacion: 'El stop-loss diario recomendado es del 5% del bankroll.',
+      },
+    ],
     contenido: `## Fundamentos del Live Betting
 
 ### ¿Por qué el live betting es más rentable?
@@ -601,6 +1064,41 @@ Cuando el público sobre-valora a un equipo con momentum.
     descripcion: 'Cómo detectar y explotar las sobre-reacciones.',
     duracion: '15 min',
     order: 2,
+    quiz: [
+      {
+        pregunta: '¿Qué es una sobre-reacción del mercado?',
+        opciones: [
+          'Cuando el mercado reacciona de forma racional a un evento',
+          'Cuando el mercado ajusta una cuota más allá de lo racional',
+          'Cuando la cuota no se mueve',
+          'Cuando todos los apostadores están de acuerdo',
+        ],
+        correcta: 1,
+        explicacion: 'Una sobre-reacción ocurre cuando el mercado ajusta una cuota más allá de lo racional después de un evento.',
+      },
+      {
+        pregunta: '¿Cuánto puede caer la cuota de un equipo que marca un gol en los primeros 5 minutos?',
+        opciones: [
+          '10-20%',
+          '40-60%',
+          '80-100%',
+          'No cambia',
+        ],
+        correcta: 1,
+        explicacion: 'La cuota del equipo que marcó puede caer entre 40-60% tras un gol temprano.',
+      },
+      {
+        pregunta: '¿Qué movimiento de cuota indica una sobre-reacción probable?',
+        opciones: [
+          'Movimiento del 10% en 30 minutos',
+          'Movimiento del 50% en menos de 5 minutos',
+          'Movimiento del 5% en 1 minuto',
+          'Cualquier movimiento es normal',
+        ],
+        correcta: 1,
+        explicacion: 'Un movimiento de cuota superior al 50% en menos de 5 minutos es señal de sobre-reacción probable.',
+      },
+    ],
     contenido: `## Sobre-reacción del Mercado
 
 ### ¿Qué es una sobre-reacción?
@@ -641,6 +1139,41 @@ Cuando el mercado ajusta una cuota **más allá de lo racional** después de un 
     descripcion: 'Protege tu bankroll durante el trading en vivo.',
     duracion: '15 min',
     order: 3,
+    quiz: [
+      {
+        pregunta: '¿Cuál es el límite máximo por apuesta en live betting?',
+        opciones: [
+          '1% del bankroll',
+          '2% del bankroll',
+          '5% del bankroll',
+          '10% del bankroll',
+        ],
+        correcta: 1,
+        explicacion: 'El máximo recomendado por apuesta en vivo es del 2% del bankroll.',
+      },
+      {
+        pregunta: '¿Cuántas apuestas simultáneas se recomiendan como máximo en vivo?',
+        opciones: [
+          '1',
+          '2-3',
+          '5-6',
+          'Las que quieras',
+        ],
+        correcta: 1,
+        explicacion: 'Se recomienda un máximo de 2-3 apuestas simultáneas en vivo para mantener el control.',
+      },
+      {
+        pregunta: 'Si un gol va en contra de tu apuesta en vivo, ¿cuál es la mejor respuesta?',
+        opciones: [
+          'Doblar la apuesta para recuperarte',
+          'Aceptar la pérdida y no doblar',
+          'Apostar al equipo contrario',
+          'Esperar al próximo partido',
+        ],
+        correcta: 1,
+        explicacion: 'Si un gol va en contra, debes aceptar la pérdida y no doblar. La disciplina es clave.',
+      },
+    ],
     contenido: `## Gestión de Riesgo en Vivo
 
 ### La naturaleza del riesgo en vivo
@@ -686,6 +1219,41 @@ const leccionesGrado5: Lesson[] = [
     descripcion: 'Beneficios rápidos de pequeños movimientos de cuota.',
     duracion: '20 min',
     order: 1,
+    quiz: [
+      {
+        pregunta: '¿En qué consiste el scalping deportivo?',
+        opciones: [
+          'Apostar grandes cantidades en un solo partido',
+          'Entrar y salir de posiciones en segundos o minutos',
+          'Apostar solo en mercados pre-partido',
+          'Seguir a tipsters profesionales',
+        ],
+        correcta: 1,
+        explicacion: 'El scalping consiste en entrar y salir de una posición en segundos o minutos, aprovechando pequeñas fluctuaciones.',
+      },
+      {
+        pregunta: '¿Qué tipo de plataforma se necesita para hacer scalping?',
+        opciones: [
+          'Una casa de apuestas tradicional',
+          'Un exchange como Betfair',
+          'Una aplicación móvil cualquiera',
+          'Una red social de apuestas',
+        ],
+        correcta: 1,
+        explicacion: 'El scalping requiere un exchange (Betfair, Matchbook) ya que necesitas poder apostar a favor y en contra.',
+      },
+      {
+        pregunta: '¿Cuántos ticks de beneficio se buscan típicamente en una operación de scalping?',
+        opciones: [
+          '10-20 ticks',
+          '2-5 ticks',
+          '1 tick',
+          '50+ ticks',
+        ],
+        correcta: 1,
+        explicacion: 'El objetivo típico en scalping es de 2-5 ticks por operación.',
+      },
+    ],
     contenido: `## Scalping Deportivo
 
 ### ¿Qué es el scalping?
@@ -734,6 +1302,41 @@ Entras en contra (lay) y cuando la cuota sube, cierras a favor (back).
     descripcion: 'Asegura beneficios neutralizando riesgos.',
     duracion: '15 min',
     order: 2,
+    quiz: [
+      {
+        pregunta: '¿Qué es el hedging en apuestas deportivas?',
+        opciones: [
+          'Apostar todo el bankroll a un solo resultado',
+          'Cubrir tu apuesta inicial con una apuesta contraria',
+          'Aumentar el stake después de perder',
+          'Apuestas múltiples combinadas',
+        ],
+        correcta: 1,
+        explicacion: 'El hedging consiste en cubrir tu apuesta inicial con una apuesta contraria para asegurar beneficios.',
+      },
+      {
+        pregunta: 'Si apostaste 20€ @ 3.00 al equipo A y quieres cubrir, ¿cuánto deberías apostar al empate a 4.00 para asegurar?',
+        opciones: [
+          '10€',
+          '15€',
+          '20€',
+          '25€',
+        ],
+        correcta: 1,
+        explicacion: 'Apostando 15€ al empate a 4.00, si gana A obtienes 45€ netos y si empata obtienes 40€ netos.',
+      },
+      {
+        pregunta: '¿Cuándo se recomienda considerar una cobertura?',
+        opciones: [
+          'Cuando el retorno potencial es negativo',
+          'Cuando el retorno potencial es +50% o más',
+          'Solo si estás perdiendo',
+          'Nunca, siempre dejar correr',
+        ],
+        correcta: 1,
+        explicacion: 'Se recomienda considerar cobertura parcial al +50% de retorno y cobertura completa al +100%.',
+      },
+    ],
     contenido: `## Hedging y Cobertura
 
 ### ¿Qué es el hedging?
@@ -776,6 +1379,41 @@ Te juegas una cantidad significativa | Siempre cubrir |
     descripcion: 'Cuándo y cómo usar el cash out.',
     duracion: '15 min',
     order: 3,
+    quiz: [
+      {
+        pregunta: '¿Qué tipo de cash out te permite cerrar solo una parte de tu apuesta?',
+        opciones: [
+          'Cash Out Total',
+          'Cash Out Parcial',
+          'Auto Cash Out',
+          'Cash Out Múltiple',
+        ],
+        correcta: 1,
+        explicacion: 'El Cash Out Parcial te permite cerrar una parte de la apuesta y dejar correr el resto.',
+      },
+      {
+        pregunta: '¿Cuándo NO deberías usar cash out según la lección?',
+        opciones: [
+          'Cuando has conseguido +100% de retorno',
+          'Por miedo a perder cuando el value sigue intacto',
+          'Cuando necesitas el capital para otra apuesta',
+          'Cuando el contexto del partido ha cambiado',
+        ],
+        correcta: 1,
+        explicacion: 'No debes usar cash out por miedo a perder si el value sigue intacto. Es el "error más común".',
+      },
+      {
+        pregunta: '¿Cuándo es matemáticamente correcto aceptar un cash out?',
+        opciones: [
+          'Cuando el cash out ofrecido es menor que el valor esperado',
+          'Cuando el cash out ofrecido es mayor que (Probabilidad Real × Retorno Potencial)',
+          'Siempre que ofrezcan cash out',
+          'Nunca, el cash out siempre es malo',
+        ],
+        correcta: 1,
+        explicacion: 'Debes aceptar cash out solo si: Cash Out Ofrecido > (Probabilidad Real × Retorno Potencial).',
+      },
+    ],
     contenido: `## Cash Out Estratégico
 
 ### ¿Qué es el cash out?
@@ -828,6 +1466,41 @@ const leccionesGrado6: Lesson[] = [
     descripcion: 'Predice goles usando la distribución de Poisson.',
     duracion: '25 min',
     order: 1,
+    quiz: [
+      {
+        pregunta: '¿Qué distribución matemática se usa para predecir goles en un partido?',
+        opciones: [
+          'Distribución normal',
+          'Distribución de Poisson',
+          'Distribución binomial',
+          'Distribución uniforme',
+        ],
+        correcta: 1,
+        explicacion: 'La distribución de Poisson se usa para predecir la probabilidad de que ocurran X eventos (goles) en un intervalo fijo.',
+      },
+      {
+        pregunta: 'En la fórmula P(X = k) = (λ^k × e^-λ) / k!, ¿qué representa λ (lambda)?',
+        opciones: [
+          'El número de goles del equipo rival',
+          'El promedio de goles esperados',
+          'La probabilidad de empate',
+          'El número de partidos jugados',
+        ],
+        correcta: 1,
+        explicacion: 'λ (lambda) representa el promedio de goles esperados del equipo.',
+      },
+      {
+        pregunta: '¿Cuál es una limitación del modelo de Poisson aplicado al fútbol?',
+        opciones: [
+          'Es demasiado complejo de calcular',
+          'No considera la dependencia entre equipos',
+          'Solo funciona para la liga española',
+          'Requiere 100+ partidos de datos',
+        ],
+        correcta: 1,
+        explicacion: 'Una limitación es que no considera la dependencia entre equipos y asume consistencia durante todo el partido.',
+      },
+    ],
     contenido: `## Modelo de Poisson
 
 ### ¿Qué es la distribución de Poisson?
@@ -882,6 +1555,41 @@ P(1) = (1.5^1 × e^-1.5) / 1! = 0.335 = 33.5%
     descripcion: 'Simula miles de escenarios para calcular probabilidades reales.',
     duracion: '20 min',
     order: 2,
+    quiz: [
+      {
+        pregunta: '¿Qué es la simulación Monte Carlo aplicada a apuestas?',
+        opciones: [
+          'Un juego de casino con cartas',
+          'Una técnica que ejecuta miles de simulaciones para calcular probabilidades',
+          'Un método para apostar en vivo',
+          'Un tipo de cuota fraccionaria',
+        ],
+        correcta: 1,
+        explicacion: 'Monte Carlo es una técnica computacional que ejecuta miles de simulaciones de un evento para calcular probabilidades.',
+      },
+      {
+        pregunta: '¿Cuántas simulaciones se recomiendan típicamente en Monte Carlo?',
+        opciones: [
+          '100',
+          '1,000',
+          '10,000',
+          '1,000,000',
+        ],
+        correcta: 2,
+        explicacion: 'En el ejemplo de la lección se usan 10,000 simulaciones para obtener probabilidades estables.',
+      },
+      {
+        pregunta: '¿Cuál es una ventaja de Monte Carlo sobre modelos simples como Poisson?',
+        opciones: [
+          'Es más fácil de calcular a mano',
+          'Captura no linealidades y es fácil de extender',
+          'No requiere datos históricos',
+          'Funciona sin ordenador',
+        ],
+        correcta: 1,
+        explicacion: 'Monte Carlo captura no linealidades, es fácil de extender con variables adicionales y flexible para cualquier deporte.',
+      },
+    ],
     contenido: `## Simulación Monte Carlo
 
 ### ¿Qué es Monte Carlo?
@@ -943,6 +1651,41 @@ def simular_partido(goles_local, goles_visitante, n=10000):
     descripcion: 'El concepto más importante del betting profesional.',
     duracion: '20 min',
     order: 3,
+    quiz: [
+      {
+        pregunta: '¿Cuál es la fórmula del Expected Value?',
+        opciones: [
+          'EV = Cuota / Probabilidad Real',
+          'EV = (Probabilidad Real × Cuota) - 1',
+          'EV = 1 / Cuota × 100',
+          'EV = Probabilidad Real - Cuota',
+        ],
+        correcta: 1,
+        explicacion: 'EV = (Probabilidad Real × Cuota) - 1. Si es positivo, la apuesta es rentable a largo plazo.',
+      },
+      {
+        pregunta: 'Según la ley de los grandes números, ¿cuántas apuestas se necesitan para que el EV se cumpla casi exactamente?',
+        opciones: [
+          '100',
+          '1,000',
+          '10,000',
+          '100,000',
+        ],
+        correcta: 2,
+        explicacion: 'Con 10,000 apuestas, el EV se cumple casi exactamente según la ley de los grandes números.',
+      },
+      {
+        pregunta: '¿Qué error común cometen los apostadores respecto al EV?',
+        opciones: [
+          'Calcular EV para todas las apuestas',
+          'Confundir EV con resultado: una apuesta EV+ puede perder',
+          'Usar EV solo en exchanges',
+          'Apostar solo cuando el EV es negativo',
+        ],
+        correcta: 1,
+        explicacion: 'Un error común es confundir EV con resultado. Una apuesta EV+ puede perder y una EV- puede ganar.',
+      },
+    ],
     contenido: `## Expected Value (EV+)
 
 ### ¿Qué es el EV?
@@ -1000,6 +1743,41 @@ const leccionesGrado7: Lesson[] = [
     descripcion: 'Introducción a ML aplicado a predicción deportiva.',
     duracion: '25 min',
     order: 1,
+    quiz: [
+      {
+        pregunta: '¿Por qué el Machine Learning puede superar a modelos tradicionales como Poisson?',
+        opciones: [
+          'Porque es más fácil de implementar',
+          'Porque puede capturar relaciones no lineales y patrones complejos',
+          'Porque no requiere datos históricos',
+          'Porque funciona sin programación',
+        ],
+        correcta: 1,
+        explicacion: 'ML puede capturar relaciones no lineales y patrones complejos que modelos tradicionales no detectan.',
+      },
+      {
+        pregunta: '¿Cuál es el primer paso del pipeline de ML en betting?',
+        opciones: [
+          'Selección de modelo',
+          'Recolección de datos',
+          'Evaluación',
+          'Feature engineering',
+        ],
+        correcta: 1,
+        explicacion: 'El primer paso es la recolección de datos a través de APIs deportivas y datos históricos.',
+      },
+      {
+        pregunta: '¿Qué algoritmo de ML se recomienda para clasificación por ser preciso, rápido y robusto?',
+        opciones: [
+          'Redes Bayesianas',
+          'LSTM',
+          'XGBoost',
+          'Random Forest',
+        ],
+        correcta: 2,
+        explicacion: 'XGBoost se recomienda para clasificación por ser preciso, rápido y robusto.',
+      },
+    ],
     contenido: `## Machine Learning en Apuestas
 
 ### ¿Por qué ML?
@@ -1045,6 +1823,41 @@ Los modelos tradicionales (Poisson, ELO) tienen limitaciones. ML puede capturar 
     descripcion: 'Crea variables predictivas efectivas.',
     duracion: '20 min',
     order: 2,
+    quiz: [
+      {
+        pregunta: '¿Qué es el feature engineering en Machine Learning?',
+        opciones: [
+          'Seleccionar el mejor algoritmo',
+          'Crear variables predictivas que capturen información relevante',
+          'Entrenar el modelo con más datos',
+          'Evaluar la precisión del modelo',
+        ],
+        correcta: 1,
+        explicacion: 'Feature engineering consiste en crear variables (features) que capturen información relevante para tus predicciones.',
+      },
+      {
+        pregunta: '¿Cuántas features se recomienda no superar para evitar overfitting?',
+        opciones: [
+          '5-10',
+          '20-30',
+          '50-100',
+          'Cuantas más mejor',
+        ],
+        correcta: 1,
+        explicacion: 'Se recomienda no usar más de 20-30 features para evitar overfitting.',
+      },
+      {
+        pregunta: '¿Qué técnica de feature selection elimina features muy correlacionadas?',
+        opciones: [
+          'Importancia (XGBoost)',
+          'PCA',
+          'Correlación',
+          'Selección manual',
+        ],
+        correcta: 2,
+        explicacion: 'La correlación permite eliminar features que están muy correlacionadas entre sí.',
+      },
+    ],
     contenido: `## Feature Engineering
 
 ### ¿Qué es feature engineering?
@@ -1112,6 +1925,41 @@ const leccionesGrado8: Lesson[] = [
     descripcion: 'Conecta con fuentes de datos en tiempo real.',
     duracion: '20 min',
     order: 1,
+    quiz: [
+      {
+        pregunta: '¿Qué API deportiva ofrece datos de cuotas de múltiples casas?',
+        opciones: [
+          'API-Football',
+          'The Odds API',
+          'Betfair API',
+          'Twitter API',
+        ],
+        correcta: 1,
+        explicacion: 'The Odds API proporciona cuotas pre-partido de múltiples casas de apuestas.',
+      },
+      {
+        pregunta: '¿Cuántas requests mensuales incluye el free tier de The Odds API?',
+        opciones: [
+          '100',
+          '500',
+          '1,000',
+          '10,000',
+        ],
+        correcta: 1,
+        explicacion: 'The Odds API tiene un free tier de 500 requests por mes.',
+      },
+      {
+        pregunta: '¿Qué buena práctica se recomienda al trabajar con APIs deportivas?',
+        opciones: [
+          'Llamar a la API cada segundo',
+          'Cachear respuestas para no exceder límites',
+          'Usar siempre la misma API',
+          'No implementar reintentos',
+        ],
+        correcta: 1,
+        explicacion: 'Se recomienda cachear respuestas para no exceder los límites de las APIs.',
+      },
+    ],
     contenido: `## APIs Deportivas
 
 ### APIs recomendadas
@@ -1152,6 +2000,41 @@ const data = await response.json()
     descripcion: 'Extrae datos de páginas web de forma automatizada.',
     duracion: '20 min',
     order: 2,
+    quiz: [
+      {
+        pregunta: '¿Qué debes revisar antes de hacer scraping a un sitio web?',
+        opciones: [
+          'El diseño de la página',
+          'El robots.txt y los términos de servicio',
+          'El código fuente de la página',
+          'Las redes sociales del sitio',
+        ],
+        correcta: 1,
+        explicacion: 'Debes revisar robots.txt y términos de servicio para asegurarte de que el scraping está permitido.',
+      },
+      {
+        pregunta: '¿Qué herramienta se usa para browser automation en Python?',
+        opciones: [
+          'BeautifulSoup',
+          'Playwright',
+          'cheerio',
+          'Puppeteer',
+        ],
+        correcta: 1,
+        explicacion: 'Playwright se usa para browser automation en Python, mientras que Puppeteer es para Node.js.',
+      },
+      {
+        pregunta: '¿Qué herramienta de CI/CD se menciona para automatizar scrapers diarios?',
+        opciones: [
+          'Jenkins',
+          'GitHub Actions',
+          'Travis CI',
+          'CircleCI',
+        ],
+        correcta: 1,
+        explicacion: 'GitHub Actions se menciona para programar scrapers diarios y almacenar resultados en Supabase.',
+      },
+    ],
     contenido: `## Scraping y Automatización
 
 ### Consideraciones legales
@@ -1198,6 +2081,41 @@ const leccionesGrado9: Lesson[] = [
     descripcion: 'Combina múltiples fuentes de datos en un modelo unificado.',
     duracion: '25 min',
     order: 1,
+    quiz: [
+      {
+        pregunta: '¿Qué enfoque usan los mejores apostadores según la lección?',
+        opciones: [
+          'Usar una sola métrica confiable',
+          'Combinar decenas de variables en un sistema integrado',
+          'Seguir solo las cuotas de Betfair',
+          'Apostar únicamente en vivo',
+        ],
+        correcta: 1,
+        explicacion: 'Los mejores apostadores combinan decenas de variables en un sistema integrado.',
+      },
+      {
+        pregunta: '¿Qué técnica se usa para combinar múltiples modelos en uno solo?',
+        opciones: [
+          'Selección manual del mejor modelo',
+          'Ensemble (promedio ponderado)',
+          'Usar solo el modelo más simple',
+          'Alternar modelos cada semana',
+        ],
+        correcta: 1,
+        explicacion: 'Se usa un Ensemble que promedia ponderadamente los resultados de múltiples modelos.',
+      },
+      {
+        pregunta: '¿Qué significa que unas probabilidades estén "bien calibradas"?',
+        opciones: [
+          'Que siempre aciertan',
+          'Que eventos con 60% de probabilidad ganan el 60% de las veces',
+          'Que son mayores que las de la casa',
+          'Que se actualizan cada minuto',
+        ],
+        correcta: 1,
+        explicacion: 'Probabilidades bien calibradas significa que eventos con 60% de probabilidad ganan el 60% de las veces.',
+      },
+    ],
     contenido: `## Sistemas Multi-Variable
 
 ### La ventaja cuantitativa
@@ -1241,6 +2159,41 @@ Ajusta tus probabilidades para que sean **bien calibradas**:
     descripcion: 'Sistema de detección de value en tiempo real.',
     duracion: '20 min',
     order: 2,
+    quiz: [
+      {
+        pregunta: '¿Cada cuánto tiempo se recomienda consultar la API deportiva en un sistema de detección en tiempo real?',
+        opciones: [
+          'Cada 5 segundos',
+          'Cada 30 segundos',
+          'Cada 5 minutos',
+          'Cada hora',
+        ],
+        correcta: 1,
+        explicacion: 'La arquitectura del sistema consulta la API deportiva cada 30 segundos.',
+      },
+      {
+        pregunta: '¿Qué condiciones debe cumplir una value bet para ser detectada por el radar?',
+        opciones: [
+          'EV > 5% y odds > 1.50',
+          'EV > 10% y odds > 2.00',
+          'Cualquier EV positivo',
+          'Odds > 5.00',
+        ],
+        correcta: 0,
+        explicacion: 'El detector busca EV > 5% y odds > 1.50 para generar una alerta de value bet.',
+      },
+      {
+        pregunta: '¿Qué es un "steam move" en el contexto del radar?',
+        opciones: [
+          'Una cuota que no se mueve',
+          'Una cuota moviéndose rápidamente en una dirección',
+          'Una cuota muy baja',
+          'Una cuota de un deporte poco conocido',
+        ],
+        correcta: 1,
+        explicacion: 'Un steam move es una cuota que se mueve rápidamente en una dirección, indicando actividad significativa.',
+      },
+    ],
     contenido: `## Live Value Bet Radar
 
 ### Arquitectura en tiempo real
@@ -1292,6 +2245,41 @@ const leccionesGrado10: Lesson[] = [
     descripcion: 'La mentalidad que separa a los profesionales del resto.',
     duracion: '20 min',
     order: 1,
+    quiz: [
+      {
+        pregunta: '¿Cuál es el primer principio del Grandmaster?',
+        opciones: [
+          'Ganar siempre',
+          'Proceso sobre resultados',
+          'Apostar grande en confianza alta',
+          'Seguir a los mejores tipsters',
+        ],
+        correcta: 1,
+        explicacion: 'Un Grandmaster sabe que una buena decisión puede dar mal resultado. Proceso sobre resultados.',
+      },
+      {
+        pregunta: '¿Cuántas apuestas sin beneficio pueden tener incluso los mejores del mundo?',
+        opciones: [
+          '50',
+          '100',
+          '200',
+          '500',
+        ],
+        correcta: 2,
+        explicacion: 'Los mejores del mundo tienen rachas de hasta 200 apuestas sin beneficio.',
+      },
+      {
+        pregunta: '¿Qué actividad NO forma parte de la rutina del Grandmaster?',
+        opciones: [
+          'Revisar mercados por la mañana',
+          'Live trading por la tarde',
+          'Apostar a todos los partidos disponibles',
+          'Revisión del día por la noche',
+        ],
+        correcta: 2,
+        explicacion: 'La rutina incluye revisión matutina, live trading y revisión nocturna, pero no apostar a todo.',
+      },
+    ],
     contenido: `## Mentalidad Grandmaster
 
 ### El camino al dominio
@@ -1343,6 +2331,41 @@ Estudio → Análisis → Apuestas EV+ → Resultados
     descripcion: 'Gestión avanzada de bankroll y sindicatos.',
     duracion: '20 min',
     order: 2,
+    quiz: [
+      {
+        pregunta: '¿Cuántas cuentas en diferentes casas se recomienda tener?',
+        opciones: [
+          '1-2',
+          '3-5',
+          '10-15',
+          'Cuantas más mejor',
+        ],
+        correcta: 1,
+        explicacion: 'Se recomienda tener 3-5 cuentas en diferentes casas para evitar limitación de stake.',
+      },
+      {
+        pregunta: '¿Qué porcentaje del capital se recomienda destinar a value betting?',
+        opciones: [
+          '20%',
+          '50%',
+          '70%',
+          '100%',
+        ],
+        correcta: 1,
+        explicacion: 'El 50% del capital se recomienda destinarlo a value betting para crecimiento estable.',
+      },
+      {
+        pregunta: '¿Cuándo se recomienda considerar formar un sindicato profesional?',
+        opciones: [
+          'Cuando tienes 10,000€',
+          'Cuando tu capital alcanza 50,000€+',
+          'Cuando empiezas a apostar',
+          'Solo si eres un inversor institucional',
+        ],
+        correcta: 1,
+        explicacion: 'Cuando tu capital alcanza 50,000€+, puedes considerar formar un sindicato profesional.',
+      },
+    ],
     contenido: `## Operativa Profesional
 
 ### Gestión de bankroll avanzada

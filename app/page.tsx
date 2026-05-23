@@ -1,6 +1,16 @@
 import Link from 'next/link'
+import type { Metadata } from 'next'
 import { Button } from '@/components/ui/button'
 import { ChevronRight, Brain, BookOpen, BarChart3, Shield, Trophy, Sparkles } from 'lucide-react'
+
+export const metadata: Metadata = {
+  title: 'Chess Bets Academy — Aprende Trading Deportivo con IA',
+  description: 'La plataforma definitiva para aprender apuestas deportivas EN VIVO. Sistema de 10 grados, simulador, IA cuantitativa y certificaciones.',
+  openGraph: {
+    title: 'Chess Bets Academy — Aprende Trading Deportivo con IA',
+    description: 'La plataforma definitiva para aprender apuestas deportivas EN VIVO. Sistema de 10 grados, simulador, IA cuantitativa y certificaciones.',
+  },
+}
 
 const features = [
   {

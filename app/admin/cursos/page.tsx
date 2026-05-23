@@ -1,6 +1,12 @@
+import type { Metadata } from 'next'
 import { gradosData } from '@/lib/academy/content'
 import { BookOpen, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
+
+export const metadata: Metadata = {
+  title: 'Gestionar Cursos — Chess Bets Academy',
+  description: 'Panel de administración de cursos: visualiza todos los grados y lecciones disponibles.',
+}
 
 export default function AdminCursosPage() {
   const totalLecciones = gradosData.reduce(

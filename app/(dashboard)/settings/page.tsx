@@ -4,9 +4,10 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
+import { ThemeSelector } from '@/components/ThemeSelector'
 import {
   Save, LogOut, User, Send, CheckCircle, XCircle, Loader,
-  Lock, Bell, Moon
+  Lock, Bell, Sun, Moon, Monitor, Crown,
 } from 'lucide-react'
 
 export default function SettingsPage() {
@@ -38,6 +39,10 @@ export default function SettingsPage() {
   const [telegramCopied, setTelegramCopied] = useState(false)
   const [telegramBotUsername, setTelegramBotUsername] = useState('chessbetsai_bot')
 
+  // Subscription
+  const [subscriptionPlan, setSubscriptionPlan] = useState('free')
+  const [subscriptionStatus, setSubscriptionStatus] = useState('inactive')
+
   useEffect(() => {
     const supabase = createClient()
     supabase.auth.getUser().then((res: any) => { const user = res.data?.user
@@ -51,6 +56,8 @@ export default function SettingsPage() {
               setEmailNotifs(d.email_notifications ?? true)
               setPushNotifs(d.push_notifications ?? true)
               setDailyDigest(d.daily_digest ?? false)
+              setSubscriptionPlan(d.membership_plan || 'free')
+              setSubscriptionStatus(d.subscription_status || 'inactive')
             }
           })
         supabase.from('telegram_subscriptions').select('chat_id').eq('user_id', user.id).single()
@@ -177,6 +184,42 @@ export default function SettingsPage() {
         </div>
       </form>
 
+      {/* Theme */}
+      <div className="mb-6 rounded-xl border border-zinc-800 bg-zinc-900/50 p-6">
+        <h3 className="mb-4 flex items-center gap-2 text-sm font-semibold text-zinc-400 uppercase tracking-wider">
+          <Sun className="h-4 w-4" /> Tema
+        </h3>
+        <ThemeSelector />
+      </div>
+
+      {/* Subscription */}
+      <div className="mb-6 rounded-xl border border-zinc-800 bg-zinc-900/50 p-6">
+        <h3 className="mb-4 flex items-center gap-2 text-sm font-semibold text-zinc-400 uppercase tracking-wider">
+          <Crown className="h-4 w-4" /> Suscripción
+        </h3>
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-sm text-zinc-200">
+              Plan <span className="font-semibold text-amber-500 capitalize">{subscriptionPlan}</span>
+            </p>
+            <p className="text-xs text-zinc-500">
+              {subscriptionStatus === 'active' ? 'Facturación activa' :
+               subscriptionStatus === 'past_due' ? 'Pago pendiente' :
+               subscriptionPlan === 'free' ? 'Sin suscripción de pago' : 'Suscripción inactiva'}
+            </p>
+          </div>
+          {subscriptionPlan !== 'free' ? (
+            <a href="/api/stripe/portal" className="rounded-lg border border-zinc-700 px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-800">
+              Gestionar
+            </a>
+          ) : (
+            <a href="/upgrade" className="rounded-lg bg-amber-500 px-4 py-2 text-sm font-medium text-black hover:bg-amber-400">
+              Actualizar
+            </a>
+          )}
+        </div>
+      </div>
+
       {/* Telegram */}
       <div className="mb-6 rounded-xl border border-zinc-800 bg-zinc-900/50 p-6">
         <h3 className="mb-4 flex items-center gap-2 text-sm font-semibold text-zinc-400 uppercase tracking-wider">
@@ -188,7 +231,7 @@ export default function SettingsPage() {
               <CheckCircle className="h-4 w-4" /> Conectado{telegramChatId ? ` (chat #${telegramChatId})` : ''}
             </div>
             <button onClick={async () => {
-              const supabase = createClient(); const { data: { user } } = await supabase.auth.getUser()
+              const supabase = createClient(); const { data: userData } = await supabase.auth.getUser(); const user = userData?.user
               if (user) { await supabase.from('telegram_subscriptions').delete().eq('user_id', user.id); setTelegramConnected(false); setTelegramChatId(null) }
             }} className="flex items-center gap-2 rounded-lg border border-red-500/30 px-4 py-2 text-sm text-red-400 hover:bg-red-500/10">
               <XCircle className="h-4 w-4" /> Desconectar Telegram
